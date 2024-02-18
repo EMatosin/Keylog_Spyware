@@ -1,6 +1,5 @@
  # Keylog_Spyware
  Vous devez réaliser un spyware (logiciel espion) exclusivement en Python 3. Il est composé de deux éléments : un client et un  serveur.
-
  
  ##  Exigences techniques client
  
@@ -26,12 +25,11 @@
  
  Il doit embarquer les arguments suivants 
  
-   -  -h/--help
-   -  affiche l'aide et les différentes options.-l/--listen <port>
-   -  se met en écoute sur le port TCP saisi par l'utilisateur et attend les données du spyware.-s/--show
-   -  affiche la liste des fichiers réceptionnées par le programme.-r/--readfile <nom_fichier>
-   -  affiche le contenu du fichier stocké sur le serveur du spyware. Le contenu doit être parfaitement lisible.-k/--kill
-   -  arrête toute les instances de serveurs en cours, avertit le spyware de s'arrêter et de supprimer la capture.
+   -  -h/--help affiche l'aide et les différentes options.
+   -  -l/--listen <port> se met en écoute sur le port TCP saisi par l'utilisateur et attend les données du spyware.
+   -  -s/--show affiche la liste des fichiers réceptionnées par le programme.
+   -  -r/--readfile <nom_fichier> affiche le contenu du fichier stocké sur le serveur du spyware. Le contenu doit être parfaitement lisible.
+   -  -k/--kill arrête toute les instances de serveurs en cours, avertit le spyware de s'arrêter et de supprimer la capture.
  
  ##  Fonctionnalités supplémentaires
  
@@ -40,3 +38,5 @@
  Implémenter des fonctionnalités supplémentaires pour le spyware.
  
  Implémenter des fonctionnalités de contournement d'antivirus.
+
+
