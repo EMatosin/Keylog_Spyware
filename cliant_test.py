@@ -48,6 +48,8 @@ def minuteur(dead):
             print(i)
             time.sleep(3)
             i+=1
+            if message == "send":
+                send_file(filename, s)
             if message == "re":
                 i = 0
                 message = ""
